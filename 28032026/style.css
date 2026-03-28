@@ -1,0 +1,61 @@
+.login {
+    background-image: url("https://cdn.britannica.com/17/83817-050-67C814CD/Mount-Everest.jpg");
+    /* filter: invert(0.3); */
+    width: 100% !important;
+    background-size: 100%;
+    background-repeat:no-repeat;
+    /* height: 100vh; */
+
+}
+
+/* .container-fluid>img {
+    opacity: 0.6 !important;
+    fill: #cacaca !important;
+    position: absolute;
+    width: 100%;
+    filter: invert(0.3);
+    margin: 0;
+} */
+.btn-outline-white:hover {
+    border: 2px solid #fff !important;
+}
+
+.bg-light-color {
+    background-color: #cacaca !important;
+}
+
+.card-login {
+    opacity: 0.7;
+}
+
+.font-lg {
+    font-size: 30px !important;
+}
+
+.border-login {
+    border: none !important; 
+    border-bottom: 3px solid #fff !important; 
+    border-radius: 0px !important;
+}
+
+.btn-block {
+    width: 100% !important;
+}
+
+.without-bg {
+    mix-blend-mode: multiply;
+}
+
+.logo {
+    width: 80% !important;
+    height: 100px !important;
+}
+
+.icono {
+    width: 80px !important;
+    height: 80px !important;
+}
+
+.bg-warning-color {
+    background-color: #F2D479 !important;
+}
