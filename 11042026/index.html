@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="testApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/angular.min.js"></script>
+  <title>Inicio de Sesión</title>
+</head>
+<script>
+  let app = angular.module("testApp", []);
+
+  app.controller('loginCtrl', ["$scope", "$interval", function($scope, $interval) {
+    $scope.init = () => {
+      console.log("iniciando");
+      if ($scope.sectionSelected === 'dashboard') {
+        $scope.goToDashboard();
+      }
+    }
+
+    $scope.users = [
+      {id: 1, username: "jmayo", password: "123456", status: true },
+      {id: 2, username: "usuariobloqueado", password: "123456", status: false },
+      {id: 3, username: "admin", password: "123456", status: true },
+      {id: 4, username: "pedrito", password: "123456", status: true },
+    ]
+
+    $scope.sectionSelected = "dashboard";
+    $scope.credentials = {};
+    $scope.userLoged = undefined;
+    $scope.files = [];
+
+    $scope.login = () => {
+      let userFound = $scope.users.find(u => u.username === $scope.credentials.username && u.password === $scope.credentials.password);
+      if (userFound) {
+        if (!userFound.status) {
+          alert("Usuario Bloqueado, Comunicate con el Administrador");
+          return;
+        }
+        $scope.userLoged = userFound;
+        $scope.goToDashboard();
+      } else {
+        alert("¡Nombre de Usuario o Clave incorrectos!");
+        return;
+      }
+    }
+    $scope.goToDashboard = () => {
+      $scope.sectionSelected = "dashboard";
+        $interval(() => {
+          let height = Math.random() * 5000;
+          $scope.files.push({
+            filename: ((Math.random() * 1000) + new Date().getUTCSeconds())+".xlsx",
+            size: height,
+            bar: parseInt((height/100).toString())
+          });
+        }, 1000)
+    }
+  }]);
+</script>
+<body ng-controller="loginCtrl">
+  <div class="container-fluid" ng-init="init()">
+
+    <div class="row pt-5 mt-5" ng-if="sectionSelected === 'login'">
+      <div class="col-6 offset-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="row p-0 m-0">
+              <div class="col-6 bg-primary-color p-3" style="border-top-left-radius: 5px !important; border-bottom-left-radius: 5px !important;">
+                <div class="row">
+                  <div class="col-12">
+                    <strong class="font-nm">Bienvenido</strong>
+                  </div>
+                  <div class="col-12">
+                    Si aun no tienes credenciales; envia un correo a: <a href="mailto:webmaster.tej@gmail.com">Administrador</a>; para consultar sobre tus credenciales de ingreso.
+                    <br>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 p-3">
+                <form name="loginForm">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <img src="images/bomb.png" width="80" height="80" alt="">
+                    </div>
+                    <div class="col-12 mt-3 text-center">
+                      <strong class="font-lg text-primary-color">Iniciar Sesión</strong>
+                    </div>
+                    <div class="col-12">
+                      <small class="text-secondary">Nombre de Usuario</small>
+                      <input type="text" name="username" ng-model="credentials.username" class="form-control form-control-lg" required>
+                      <small class="help-text text-danger" ng-if="loginForm.username.$invalid && loginForm.username.$touched">
+                        Ingrese el Nombre de Usuario
+                      </small>
+                    </div>
+                    <div class="col-12">
+                      <small class="text-secondary">Contraseña</small>
+                      <div class="input-group">
+                        <input type="password" name="password" ng-model="credentials.password" class="form-control form-control-lg" minlength="6" required>
+                        <span class="button btn-light text-primary"></span>
+                      </div>
+                      <small class="help-text text-danger" ng-if="loginForm.password.$invalid && loginForm.password.$touched">
+                        <span ng-if="loginForm.password.$error.required">Ingrese la contraseña</span>
+                        <span ng-if="loginForm.password.$error.minlength">La contraseña debe tener mas de 6 caracteres</span>
+                      </small>
+                    </div>
+                    <div class="col-12 text-right">
+                      <button class="btn btn-link text-primary-color">
+                        ¿Olvidaste tu Contraseña?
+                      </button>
+                    </div>
+                    <div class="col-12 text-center mt-3">
+                      <button class="btn bg-primary-color btn-lg" ng-disabled="loginForm.$invalid" ng-click="login()">
+                        <i class="fa fa-save me-1"></i>Ingresar
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-if="sectionSelected === 'dashboard'">
+      <div class="col-3 bg-warning-color" style="height: 100vh !important; box-shadow: 2px 2px 2px #cacaca;">
+        <div class="row pt-5 mt-5">
+          <div class="col-12 text-center">
+            <img src="images/bomb.png" width="80" height="80" alt="{{userLoged.username}}"><br>
+            @{{userLoged.username}}
+          </div>
+        </div>
+      </div>
+      <div class="col-9 p-3">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                Barra de Navegación
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="row">
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-12" style="max-height: 300px !important; overflow: auto;">
+                    <strong class="font-nm text-primary">
+                      Archivos copiados
+                    </strong>
+                    <ul class="list-group">
+                      <li class="list-group-item" ng-class="{'list-group-item-danger': file.size <= 500, 'list-group-item-info': file.size >500 && file.size <= 1200, 'list-group-item-primary': file.size > 1200}" ng-repeat="file in files">
+                        <div class="row">
+                          <div class="col-8">
+                            {{file.filename}}
+                          </div>
+                          <div class="col-4 text-end">
+                            {{file.size | number:1.2-2 }} kb
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-8">
+                <div class="card">
+                  <div class="card-body">
+                    <span class="me-1" ng-repeat="file in files" ng-class="{'bg-danger': file.size <= 500, 'bg-info': file.size >500 && file.size <= 1200, 'bg-primary': file.size > 1200}" ng-style="{height: file.bar+'px'}" >+</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
