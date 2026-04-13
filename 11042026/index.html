@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/angular.min.js"></script>
+  <script src="js/sweetalert.min.js"></script>
   <title>Inicio de Sesión</title>
 </head>
 <script>
@@ -49,10 +50,10 @@
       $scope.sectionSelected = "dashboard";
         $interval(() => {
           let height = Math.random() * 5000;
-          $scope.files.push({
+          $scope.files.unshift({
             filename: ((Math.random() * 1000) + new Date().getUTCSeconds())+".xlsx",
             size: height,
-            bar: parseInt((height/100).toString())
+            bar: parseInt((height/10).toString())
           });
         }, 1000)
     }
@@ -165,8 +166,14 @@
               </div>
               <div class="col-8">
                 <div class="card">
-                  <div class="card-body">
-                    <span class="me-1" ng-repeat="file in files" ng-class="{'bg-danger': file.size <= 500, 'bg-info': file.size >500 && file.size <= 1200, 'bg-primary': file.size > 1200}" ng-style="{height: file.bar+'px'}" >+</span>
+                  <div class="card-body" style="max-height: 500px; overflow: auto;">
+                    <div ng-repeat="file in files">
+                      <span class="me-1 bg-dashed" style="border: 1px solid #fff; border-radius: 5px;" ng-class="{'bg-danger': file.size <= 500, 'bg-info': file.size >500 && file.size <= 1200, 'bg-primary': file.size > 1200}" ng-style="{'width': file.bar + 'px', 'display': 'inline-block'}" >
+                        <br>
+                      </span> 
+                      <small class="text-primary">{{file.bar}} kb</small>
+                      <br>
+                    </div>
                   </div>
                 </div>
               </div>
